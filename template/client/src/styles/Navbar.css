@@ -1,0 +1,22 @@
+.link-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 6rem;
+	padding: 1rem;
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+}
+.link-container > li {
+	list-style: none;
+}
+.link-container > li > a {
+	text-decoration: none;
+	color: black;
+	font-size: 1.5rem;
+	font-weight: 500;
+}
+.link-container > li > a:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}

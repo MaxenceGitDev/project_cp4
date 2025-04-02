@@ -12,3 +12,22 @@ interface ProductTypes {
 interface ProductTypesProps {
     products: ProductTypes[];
 }
+
+interface UserTypes {
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
+interface UserData {
+    id: number;
+    username: string;
+    email: string;
+    password: string;
+}
+
+interface propsFormTypes {
+    user: UserTypes;
+    handleChangeForm: React.ChangeEventHandler<HTMLInputElement>;
+  }

@@ -11,4 +11,13 @@ const getAllProducts = async () => {
     }
 };
 
-export { getAllProducts}
+const postCreateUser = async (userData: UserTypes) => {
+    try {
+        const response = await axios.post(`${baseUrl}/api/users`, userData);
+        return response.data;
+    } catch(error) {
+        throw new Error("Failed to create new user");
+    }
+};
+
+export { getAllProducts, postCreateUser}

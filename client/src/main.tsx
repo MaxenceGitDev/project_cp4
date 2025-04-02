@@ -12,6 +12,7 @@ import App from "./App";
 // Try creating these components in the "pages" folder
 import Home from "./pages/Home";
 import ErrorPage from "./pages/ErrorPage";
+import Login from "./pages/Login";
 // import About from "./pages/About";
 // import Contact from "./pages/Contact";
 
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
 				},
 				errorElement: <ErrorPage />,
 			},
+			{
+				path: "/login",
+				element: <Login />,
+			}
 		], // Renders the App component for the home page
 	},
 	// Try adding a new route! For example, "/about" with an About component

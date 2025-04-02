@@ -4,19 +4,7 @@ import express from "express";
 
 const app = express();
 
-// Configure it
-
-/* ************************************************************************* */
-
-// CORS Handling: Why is the current code present and do I need to define specific allowed origins for my project?
-
-// CORS (Cross-Origin Resource Sharing) is a security mechanism in web browsers that blocks requests from a different domain than the server.
-// You may find the following magic line in forums:
-
-// app.use(cors());
-
-// You should NOT do that: such code uses the `cors` module to allow all origins, which can pose security issues.
-// For this pedagogical template, the CORS code allows CLIENT_URL in development mode (when process.env.CLIENT_URL is defined).
+app.use(cors());
 
 import cors from "cors";
 
@@ -77,6 +65,8 @@ app.use(router);
 
 import fs from "node:fs";
 import path from "node:path";
+
+app.use("/images", express.static(path.join(__dirname, "../public/images")));
 
 // Serve server resources
 

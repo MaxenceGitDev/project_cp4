@@ -1,7 +1,13 @@
+
+import { useLoaderData } from "react-router-dom";
 import Product from "../components/Product";
 import "../styles/Home.css";
 
 export default function Home() {
+
+	const { products } = useLoaderData() as { products: ProductTypes[] };
+	
+
 	return (
 		<>
 			<section className="home-bg">
@@ -15,7 +21,7 @@ export default function Home() {
 				</article>
 			</section>
 			<section className="home-content">
-				<Product />
+				<Product products={products} />
 			</section>
 		</>
 	);

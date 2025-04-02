@@ -39,9 +39,9 @@ VALUES ('test', 'test@test.fr', 'password');
 
 INSERT INTO products (name, description, quantity, price, stock, image_url) 
 VALUES 
-    ('ZEN CODE', 'Focus & Concentration for long hours of code', '60', 19.99, 100, '/images/image_cp4.png'),
-    ('HARD CODE', 'Boost & Energy to win the Hackaton and beat every bugs', '60', 19.99, 100, '/images/image2_cp4.png'),
-    ('SLEEP CODE', 'Relax & Sleep after long day of git reset --hard', '60', 19.99, 100, '/images/image3_cp4.png');
+    ('ZEN CODE', 'Focus & Concentration for long hours of code', '60', 19.99, 100, 'http://localhost:3310/images/image_cp4.png'),
+    ('HARD CODE', 'Boost & Energy to win the Hackaton and beat every bugs', '60', 19.99, 100, 'http://localhost:3310/images/image2_cp4.png'),
+    ('SLEEP CODE', 'Relax & Sleep after long day of git reset --hard', '60', 19.99, 100, 'http://localhost:3310/images/image3_cp4.png');
 
 INSERT INTO carts (user_id) 
 VALUES (1);

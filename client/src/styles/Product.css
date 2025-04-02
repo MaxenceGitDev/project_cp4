@@ -104,3 +104,20 @@
     cursor: pointer;
     opacity: 0.5;
 }
+
+.desc-product-container {
+    height: 390px;
+    width: 430px;
+    margin-top: 6rem;
+    margin-left: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+.p-align {
+    text-align: center;
+    margin-top: 1rem;
+    
+    color: gray;
+}

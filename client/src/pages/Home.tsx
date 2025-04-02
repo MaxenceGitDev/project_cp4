@@ -10,7 +10,7 @@ export default function Home() {
 					Votre navigateur ne supporte pas la vidéo.
 				</video>
 				<article className="home-title">
-					<h1>Welcome.</h1>
+					<h1>Welcome on Wilder.</h1>
 					<h2>Scroll to discover</h2>
 				</article>
 			</section>

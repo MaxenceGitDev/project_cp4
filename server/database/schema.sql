@@ -1,21 +1,47 @@
-create table user (
-  id int unsigned primary key auto_increment not null,
-  email varchar(255) not null unique,
-  password varchar(255) not null
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL, 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    quantity TEXT,
+    price DECIMAL(10, 2) NOT NULL, 
+    stock INT NOT NULL DEFAULT 0,
+    image_url VARCHAR(255), 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table item (
-  id int unsigned primary key auto_increment not null,
-  title varchar(255) not null,
-  user_id int unsigned not null,
-  foreign key(user_id) references user(id)
+CREATE TABLE carts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-insert into user(id, email, password)
-values
-  (1, "jdoe@mail.com", "123456");
+CREATE TABLE cart_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cart_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT,
+    UNIQUE KEY unique_cart_product (cart_id, product_id) 
+);
 
-insert into item(id, title, user_id)
-values
-  (1, "Stuff", 1),
-  (2, "Doodads", 1);
+INSERT INTO users (username, email, password) 
+VALUES ('test', 'test@test.fr', 'password');
+
+INSERT INTO products (name, description, quantity, price, stock, image_url) 
+VALUES 
+    ('ZEN CODE', 'Focus & Concentration for long hours of code', '60', 19.99, 100, '/images/image_cp4.png'),
+    ('HARD CODE', 'Boost & Energy to win the Hackaton and beat every bugs', '60', 19.99, 100, '/images/image2_cp4.png'),
+    ('SLEEP CODE', 'Relax & Sleep after long day of git reset --hard', '60', 19.99, 100, '/images/image3_cp4.png');
+
+INSERT INTO carts (user_id) 
+VALUES (1);

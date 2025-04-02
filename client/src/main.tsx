@@ -11,10 +11,13 @@ import App from "./App";
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
 import Home from "./pages/Home";
+import ErrorPage from "./pages/ErrorPage";
 // import About from "./pages/About";
 // import Contact from "./pages/Contact";
 
 /* ************************************************************************* */
+
+import { getAllProducts } from "./services/requests";
 
 // Create router configuration with routes
 // You can add more routes as you build out your app!
@@ -26,6 +29,11 @@ const router = createBrowserRouter([
 			{
 				path: "/",
 				element: <Home />,
+				loader: async () => {
+					const products = await getAllProducts();
+					return { products };
+				},
+				errorElement: <ErrorPage />,
 			},
 		], // Renders the App component for the home page
 	},

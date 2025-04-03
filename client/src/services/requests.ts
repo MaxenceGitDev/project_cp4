@@ -77,8 +77,21 @@ const Logout = async () => {
       });
       return response.data;
     } catch (error) {
-      throw new Error("Échec de la suppression de l’article");
+      throw new Error("failed to delete item");
     }
   };
 
-export { getAllProducts, postCreateUser, postLogin, Logout, addToCart, getCart, removeCartItem}
+  const createCart = async () => {
+    try {
+      const response = await axios.post(
+        `${baseUrl}/api/carts`,
+        {},
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to create cart");
+    }
+  };
+
+export { getAllProducts, postCreateUser, postLogin, Logout, addToCart, getCart, removeCartItem, createCart}

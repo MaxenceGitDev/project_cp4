@@ -2,10 +2,28 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20vh;
+    margin-top: 10vh;
     
   }
 
   .login-link {
-    font-size: 21px;
+   padding: 14px;
+    border: none;
+    color: white;
+    background-color: #28a745;
+    border-radius: 7px;
+  }
+
+  .login-link:hover {
+    box-shadow: 1px 4px 22px -1px rgba(0,0,0,0.3);
+    background-color: #218838;
+    color: white;
+    transition: ease 0.2s;
+  }
+
+  .login-title {
+    text-align: center;
+    font-weight: 400;
+    margin-top: 15vh;
+    
   }

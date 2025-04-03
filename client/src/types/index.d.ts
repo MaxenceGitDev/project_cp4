@@ -40,6 +40,8 @@ interface propsFormTypes {
   interface AuthContextType {
     user: { id: number; username: string } | null;
     setUser: (user: { id: number; username: string } | null) => void;
+    cartCount: number; 
+    setCartCount: (count: number) => void;
     logout: () => Promise<void>;
   }
 
@@ -54,7 +56,7 @@ interface propsFormTypes {
 }
 
 interface CartTypes {
-    id: number;
+    id: number |  null;
     user_id: number;
     items: CartItem[];
 }

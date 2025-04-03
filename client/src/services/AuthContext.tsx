@@ -1,35 +1,44 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import axios from "axios";
-import { Logout } from "../services/requests"; 
+import { Logout, getCart } from "../services/requests"; 
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<{ id: number; username: string } | null>(null);
+  const [cartCount, setCartCount] = useState<number>(0);
   const [loading, setLoading]= useState(true);
 
- 
   useEffect(() => {
-    const checkAuth = async () => {
+    const checkAuthAndCart = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/check-auth`, {
+        const authResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/check-auth`, {
           withCredentials: true,
         });
-        setUser({ id: response.data.user_id, username: response.data.username });
+        
+        const newUser = { id: authResponse.data.user_id, username: authResponse.data.username };
+        setUser(newUser);
+
+        const cartData = await getCart();
+        
+        const totalItems = cartData.items.reduce((sum: number, item: any) => sum + item.quantity, 0);
+        setCartCount(totalItems);
       } catch (error) {
-        setUser(null); 
+        console.error("Erreur dans checkAuthAndCart:", error);
+        setUser(null);
+        setCartCount(0);
       } finally {
         setLoading(false);
       }
     };
-    checkAuth();
+    checkAuthAndCart();
   }, []);
-
 
   const logout = async () => {
     try {
       await Logout(); 
-      setUser(null); 
+      setUser(null);
+      setCartCount(0); 
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
     }
@@ -38,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   if (loading) return <p>Loading auth...</p>;
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, cartCount, setCartCount, logout }}>
       {children}
     </AuthContext.Provider>
   );

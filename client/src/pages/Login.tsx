@@ -22,8 +22,9 @@ export default function Login() {
 
     return (
         <>
+
+        <h1 className="login-title">Register or Login to join us 🌿</h1>
         <section className="signup-page-container">
-    
       
         {!isSignup ? (
           <SignupForm user={user} handleChangeForm={handleChangeForm} />

@@ -2,7 +2,7 @@ import { useAuth } from "../services/AuthContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Product.css";
-import { addToCart } from "../services/requests";
+import { addToCart, getCart } from "../services/requests";
 
 
 
@@ -11,7 +11,7 @@ export default function Product({products}: ProductTypesProps ) {
 
 const [selectedIndex, setSelectedIndex] = useState(0);
 const [quantity, setQuantity] = useState(1);
-const { user } = useAuth();
+const { user, setCartCount } = useAuth();
 const navigate = useNavigate();
 const selectedProduct = products[selectedIndex];
 
@@ -40,8 +40,11 @@ const handleAddToCart = async () => {
 		return;
 	}
 	try {
-		const response = await addToCart(selectedProduct.id, quantity);
-		alert(response.message);
+		await addToCart(selectedProduct.id, quantity);
+		const cartData = await getCart();
+		const totalItems = cartData.items.reduce((sum: number, item: any) => sum + item.quantity, 0);
+		setCartCount(totalItems);
+		setQuantity(1);
 	} catch (error) {
 		alert((error as Error).message || "Failed to add to cart");
 	}

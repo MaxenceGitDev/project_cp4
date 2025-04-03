@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { postCreateUser } from "../services/requests";
+import { postCreateUser, createCart } from "../services/requests";
 import { useNavigate } from "react-router-dom";
 
 import "../styles/SignupForm.css";
@@ -19,6 +19,8 @@ export default function SignupForm({ user, handleChangeForm}: propsFormTypes) {
         try {
           const response = await postCreateUser(user);
           setUser({ id: response.id, username: response.username });
+
+          await createCart();
           navigate("/");
         } catch (error) {
           if (error instanceof Error) {
@@ -44,13 +46,13 @@ export default function SignupForm({ user, handleChangeForm}: propsFormTypes) {
             </div>
           )}
           <div className="form-group">
-            <label htmlFor="username">Nom d'utilisateur</label>
+            <label htmlFor="username">Username</label>
             <input
               type="text"
               name="username"
               value={user.username}
               onChange={handleChangeForm}
-              placeholder="Entrez un nom d'utilisateur"
+              placeholder="Please choose username"
               required
             />
           </div>
@@ -61,33 +63,33 @@ export default function SignupForm({ user, handleChangeForm}: propsFormTypes) {
               name="email"
               value={user.email}
               onChange={handleChangeForm}
-              placeholder="Votre adresse mail"
+              placeholder="Enter your mail address"
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Mot de passe</label>
+            <label htmlFor="password">Password</label>
             <div className="password-input-container">
               <input
                 type="password"
                 name="password"
                 value={user.password}
                 onChange={handleChangeForm}
-                placeholder="Veuillez entrer un mot de passe"
+                placeholder="Enter password"
                 required
               />
           
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirmez le mot de passe</label>
+            <label htmlFor="confirmPassword">Confirm password</label>
             <div className="password-input-container">
               <input
                 type="password"
                 name="confirmPassword"
                 value={user.confirmPassword}
                 onChange={handleChangeForm}
-                placeholder="Veuillez entrer un mot de passe"
+                placeholder="Confirm password"
                 required
               />
           
@@ -95,10 +97,10 @@ export default function SignupForm({ user, handleChangeForm}: propsFormTypes) {
           </div>
           <div className="checkbox-container">
             <input type="checkbox" checked={checked} onChange={toggleCheck} />
-            <p>En cochant cette case, j'accepte les CGU.</p>
+            <p>Check box to accept rules & CGU.</p>
           </div>
           <button type="submit" className="signup-button" disabled={!checked}>
-            S'inscrire
+            Register
           </button>
         </form>
       </div>

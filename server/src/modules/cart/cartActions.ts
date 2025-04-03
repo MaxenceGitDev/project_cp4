@@ -22,9 +22,30 @@ const read: RequestHandler = async (req, res, next) => {
   }
 };
 
+// const add: RequestHandler = async (req, res, next) => {
+//   try {
+//     const userId = req.body.userId;
+//     const insertId = await cartRepository.create(userId);
+//     res.status(201).json({ id: insertId, user_id: userId });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
 const add: RequestHandler = async (req, res, next) => {
   try {
-    const userId = req.body.userId;
+    const userId = req.user?.id;
+    if (!userId) {
+      res.status(401).json({ message: "Utilisateur non authentifié" });
+      return;
+    }
+
+    const existingCart = await cartRepository.readByUserId(userId);
+    if (existingCart) {
+      res.json(existingCart);
+      return;
+    }
+
     const insertId = await cartRepository.create(userId);
     res.status(201).json({ id: insertId, user_id: userId });
   } catch (err) {
@@ -54,7 +75,7 @@ const getUserCart: RequestHandler = async (req, res, next) => {
    
     const cart = await cartRepository.readByUserId(userId);
     if (!cart) {
-      res.status(404).json({ message: "Cart not find" });
+      res.status(404).json({ id: null, user_id: userId, items: [] });
       return;
     }
 
@@ -64,6 +85,7 @@ const getUserCart: RequestHandler = async (req, res, next) => {
     const cartWithItems = { ...cart, items };
     res.json(cartWithItems);
   } catch (err) {
+    console.error(`Erreur dans getUserCart pour ${req.user?.id}`, err);
     next(err);
   }
 };

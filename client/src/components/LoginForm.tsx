@@ -44,26 +44,26 @@ export default function LoginForm() {
               name="email"
               value={credentials.email}
               onChange={handleChangeCredentials}
-              placeholder="Votre adresse mail"
+              placeholder="Your mail address"
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Mot de passe</label>
+            <label htmlFor="password">Password</label>
             <div className="password-input-container">
               <input
                 type="password"
                 name="password"
                 value={credentials.password}
                 onChange={handleChangeCredentials}
-                placeholder="Veuillez entrer un mot de passe"
+                placeholder="Enter password"
                 required
               />
          
             </div>
           </div>
           <button type="submit" className="signup-button">
-            Se connecter
+            Connect
           </button>
         </form>
       </div>

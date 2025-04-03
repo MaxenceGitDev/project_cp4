@@ -9,7 +9,7 @@ import "../styles/Cart.css";
 export default function Cart() {
 
     
-    const { user } = useAuth();
+    const { user, setCartCount } = useAuth();
     const [ cart, setCart ] = useState<CartTypes | null >(null);
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -18,16 +18,26 @@ export default function Cart() {
     useEffect(() => {
         const fetchCart = async () => {
             if (!user) {
-                setError("You must be connected to see your cart");
+                console.log("utilisateur non connecté");
                 navigate("/login");
                 return;
             }
             try {
+                
                 const cartData = await getCart();
+                
                 setCart(cartData);
+                const totalItems = cartData.items.reduce((sum: number, item: any) => sum + item.quantity, 0);
+                setCartCount(totalItems);
             } catch (err) {
-                setError((err as Error).message);
-            }
+                const errorMessage = (err as Error).message || "Erreur lors du chargement du panier";
+                if (errorMessage.includes("non authentifié")) {
+                    
+                  navigate("/login");
+                } else {
+                  setError(errorMessage);
+                }
+              }
         };
         fetchCart();
     }, [user]);
@@ -37,26 +47,36 @@ export default function Cart() {
         return cart.items.reduce((total, item) => total + item.quantity * item.price, 0);
     };
 
-    const handleRemoveItem = async (itemId : number) => {
+
+    const handleRemoveItem = async (itemId: number) => {
         try {
-            await removeCartItem(itemId);
-            setCart((prevCart) => prevCart && {
-                ...prevCart,
-                items: prevCart.items.filter((item) => item.id !== itemId),
-            })
+          await removeCartItem(itemId);
+          setCart((prevCart) => {
+            if (!prevCart || !prevCart.items) return prevCart;
+            const updatedItems = prevCart.items.filter((item) => item.id !== itemId);
+            const totalItems = updatedItems.reduce((sum: number, item: any) => sum + item.quantity, 0);
+            setCartCount(totalItems); 
+            return { ...prevCart, items: updatedItems };
+          });
         } catch (err) {
-            setError((err as Error).message)
+          setError((err as Error).message || "Error with delete function");
         }
-    };
+      };
 
     const svg = <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm336-552H312v480h336v-480ZM384-288h72v-336h-72v336Zm120 0h72v-336h-72v336ZM312-696v480-480Z"/></svg>
 
 
     if (!user) return null;
     if (error) return <p>{error}</p>;
-    if (!cart) return <p>Cart loading...</p>;
-    if (cart.items.length === 0) return <p>Nothing to see here.</p>;
-
+    if (cart === null) return <p>Cart loading...</p>;
+    if (cart.items.length === 0) {
+        return (
+        <section className="cart-container">
+        <h1>Your Cart</h1>       
+        <p>Nothing to see here.</p>
+        </section>
+        );
+    }
     return (
         <>
         <h1>Your cart</h1>

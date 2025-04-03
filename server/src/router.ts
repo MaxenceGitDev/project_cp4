@@ -33,7 +33,7 @@ import cartActions from "./modules/cart/cartActions";
 
 router.get("/api/carts", cartActions.browse);
 router.get("/api/carts/:id", cartActions.read);
-router.post("/api/carts", cartActions.add);
+router.post("/api/carts", auth.verify, cartActions.add);
 router.delete("/api/carts/:id", cartActions.destroy);
 router.get("/api/cart", auth.verify, cartActions.getUserCart);
 

@@ -14,7 +14,17 @@ const browse: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
-    const { userId, productId, quantity } = req.body;
+    const userId = req.user?.id; 
+    if (!userId) {
+      res.status(401).json({ message: "Utilisateur non authentifié" });
+      return;
+    }
+
+    const { productId, quantity } = req.body;
+    if (!productId || !quantity || quantity < 1) {
+      res.status(400).json({ message: "Produit ou quantité invalide" });
+      return;
+    }
 
     
     let cart = await cartRepository.readByUserId(userId);
@@ -22,8 +32,6 @@ const add: RequestHandler = async (req, res, next) => {
       const cartId = await cartRepository.create(userId);
       cart = { id: cartId, user_id: userId };
     }
-
-    
     const existingItem = await cartItemRepository.findByCartAndProduct(cart.id, productId);
     if (existingItem) {
       await cartItemRepository.updateQuantity(existingItem.id, existingItem.quantity + quantity);

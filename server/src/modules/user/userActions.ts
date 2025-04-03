@@ -1,5 +1,7 @@
 import type { RequestHandler } from "express";
 import userRepository from "./userRepository";
+import jwt from "jsonwebtoken";
+
 
 const browse: RequestHandler = async (req, res, next) => {
     try {
@@ -69,7 +71,15 @@ const add: RequestHandler = async (req, res, next) => {
             throw new Error("APP_SECRET is not configured");
         }
 
-        res.status(201).json(payload);
+        const token = jwt.sign(payload, process.env.APP_SECRET, {
+            expiresIn: "1y",
+          });
+      
+          res.cookie("auth", token).json({
+            message: "Connexion réussie",
+            user_id: payload.id,
+            username: payload.username,
+          });
 
     } catch(err) {
         next(err);

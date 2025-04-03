@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
 import cartRepository from "./cartRepository";
+import cartItemRepository from "../cartItem/cartItemRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
   try {
@@ -42,4 +43,29 @@ const destroy: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, read, add, destroy };
+const getUserCart: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = req.user?.id; 
+    if (!userId) {
+      res.status(401).json({ message: "User not identified" });
+      return;
+    }
+
+   
+    const cart = await cartRepository.readByUserId(userId);
+    if (!cart) {
+      res.status(404).json({ message: "Cart not find" });
+      return;
+    }
+
+
+    const items = await cartItemRepository.readByCartIdWithProducts(cart.id);
+
+    const cartWithItems = { ...cart, items };
+    res.json(cartWithItems);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read, add, destroy, getUserCart };

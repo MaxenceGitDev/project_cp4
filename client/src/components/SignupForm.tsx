@@ -3,11 +3,13 @@ import { postCreateUser } from "../services/requests";
 import { useNavigate } from "react-router-dom";
 
 import "../styles/SignupForm.css";
+import { useAuth } from "../services/AuthContext";
 
 
 export default function SignupForm({ user, handleChangeForm}: propsFormTypes) {
 
     const navigate = useNavigate();
+    const { setUser } = useAuth();
     const [error, setError] = useState("");
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,8 +17,8 @@ export default function SignupForm({ user, handleChangeForm}: propsFormTypes) {
         setError("");
     
         try {
-          const loginData = await postCreateUser(user);
-          console.info(loginData);
+          const response = await postCreateUser(user);
+          setUser({ id: response.id, username: response.username });
           navigate("/");
         } catch (error) {
           if (error instanceof Error) {

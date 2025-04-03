@@ -1,6 +1,9 @@
-import "../styles/Product.css";
-
+import { useAuth } from "../services/AuthContext";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/Product.css";
+import { addToCart } from "../services/requests";
+
 
 
 
@@ -8,7 +11,8 @@ export default function Product({products}: ProductTypesProps ) {
 
 const [selectedIndex, setSelectedIndex] = useState(0);
 const [quantity, setQuantity] = useState(1);
-
+const { user } = useAuth();
+const navigate = useNavigate();
 const selectedProduct = products[selectedIndex];
 
 
@@ -29,17 +33,31 @@ const increment = () => {
 
 if (products.length === 0) return <p>Aucun produit à afficher</p>;
 
+const handleAddToCart = async () => {
+	if (!user) {
+		alert("You must be connected to do this");
+		navigate("/login");
+		return;
+	}
+	try {
+		const response = await addToCart(selectedProduct.id, quantity);
+		alert(response.message);
+	} catch (error) {
+		alert((error as Error).message || "Failed to add to cart");
+	}
+}
+
 
 
 	return (
 		<>
 			<section className="section-product-container">
-			<article className="title-section">
+			<article className="title-section anim">
 				<h1>Discover our natural gummies 🌿</h1>
 				<h2>only natural ingredients</h2>
 			</article>	
 			<div className="main-product-container">
-				<section className="product-container">
+				<section className="product-container anim">
 					<img src={selectedProduct.image_url} alt={selectedProduct.name}/>
 					<div>
 						<h3>{selectedProduct.name}</h3>
@@ -62,10 +80,10 @@ if (products.length === 0) return <p>Aucun produit à afficher</p>;
 					<button type="button" onClick={increment}>+</button>
 					</div>
 
-					<button className="buy-button" type="button">Add to cart</button>
+					<button className="buy-button" type="button" onClick={handleAddToCart}>Add to cart</button>
 					</div>
 				</section>
-				<section className="desc-product-container">
+				<section className="desc-product-container anim">
 					<p>Give your body and mind the best of nature with our <strong>100% natural</strong> gummies</p>
 					<p>🧠 Focus – Sharpen your mind and enhance concentration.</p>
 					<p>⚡ Energy Booster – Fuel your day with a natural energy boost.</p>

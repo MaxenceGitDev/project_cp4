@@ -47,6 +47,18 @@ class CartItemRepository {
     );
     return rows[0] as CartItem;
   }
+
+  async readByCartIdWithProducts(cartId: number): Promise<CartItem[]> {
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT ci.id, ci.cart_id, ci.product_id, ci.quantity, 
+              p.name, p.price, p.image_url 
+       FROM cart_items ci 
+       JOIN products p ON ci.product_id = p.id 
+       WHERE ci.cart_id = ?`,
+      [cartId]
+    );
+    return rows as CartItem[];
+  }
 }
 
 export default new CartItemRepository();

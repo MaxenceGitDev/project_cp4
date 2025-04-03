@@ -15,6 +15,12 @@ router.post("/api/users", userActions.add);
 router.put("/api/users/:id", userActions.edit);
 router.delete("/api/users/:id", userActions.destroy);
 
+import auth from "./middleware/auth";
+
+router.post("/api/login", auth.login);
+router.get("/api/logout", auth.logout);
+router.get("/api/check-auth", auth.checkAuth);
+
 import productActions from "./modules/product/productActions";
 
 router.get("/api/products", productActions.browse);
@@ -29,11 +35,12 @@ router.get("/api/carts", cartActions.browse);
 router.get("/api/carts/:id", cartActions.read);
 router.post("/api/carts", cartActions.add);
 router.delete("/api/carts/:id", cartActions.destroy);
+router.get("/api/cart", auth.verify, cartActions.getUserCart);
 
 import cartItemActions from "./modules/cartItem/cartItemActions";
 
 router.get("/api/cart-items/:cartId", cartItemActions.browse); // Liste les items d’un panier
-router.post("/api/cart-items/add", cartItemActions.add); // Ajoute un article
+router.post("/api/cart-items/add", auth.verify, cartItemActions.add); // Ajoute un article
 router.delete("/api/cart-items/:id", cartItemActions.destroy); // Supprime un article
 
 /* ************************************************************************* */

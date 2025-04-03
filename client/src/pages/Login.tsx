@@ -5,7 +5,7 @@ import "../styles/Login.css";
 
 export default function Login() {
 
-   const [isSignup, setIsSignup] = useState(false);
+   const [isSignup, setIsSignup] = useState(true);
    const toggleForm = () => {
     setIsSignup(!isSignup);
    };
@@ -31,7 +31,7 @@ export default function Login() {
           <LoginForm />
         )}
         <button type="button" className="login-link" onClick={toggleForm}>
-          {!isSignup ? "Déjà un compte ?" : "Pas encore de compte ?"}
+          {!isSignup ? "Click here to login" : "Click here to register"}
         </button>
      
       

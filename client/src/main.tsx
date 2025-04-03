@@ -2,6 +2,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./services/AuthContext";
 
 /* ************************************************************************* */
 
@@ -13,6 +14,7 @@ import App from "./App";
 import Home from "./pages/Home";
 import ErrorPage from "./pages/ErrorPage";
 import Login from "./pages/Login";
+import Cart from "./pages/Cart";
 // import About from "./pages/About";
 // import Contact from "./pages/Contact";
 
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
 			{
 				path: "/login",
 				element: <Login />,
+			},
+			{
+				path: "/cart",
+				element: <Cart />
 			}
 		], // Renders the App component for the home page
 	},
@@ -56,7 +62,9 @@ if (rootElement == null) {
 // Render the app inside the root element
 createRoot(rootElement).render(
 	<StrictMode>
+	<AuthProvider>	
 		<RouterProvider router={router} />
+	</AuthProvider>	
 	</StrictMode>,
 );
 
